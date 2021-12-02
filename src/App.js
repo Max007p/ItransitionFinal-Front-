@@ -1,23 +1,20 @@
-import logo from './logo.svg';
+import { Outlet } from "react-router-dom";
 import './App.css';
+import Header from './static_content/Header';
+import Container from '@mui/material/Container';
+
+const sections = [
+  { title: 'Главная', url: '/' },
+  { title: 'Обзоры', url: '/reviews' },
+];
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Container maxWidth="lg">
+        <Header title="Кинопоиск" sections={sections}/>
+        <Outlet/>
+      </Container>
     </div>
   );
 }
