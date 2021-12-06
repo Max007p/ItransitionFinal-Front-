@@ -2,10 +2,13 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from "react-router-dom";
+import ReviewService from '../services/review.service';
+import * as React from 'react';
+import { useParams } from 'react-router-dom';
 
 const columns = [
     {   
-        field: 'id',
+        field: 'reviewId',
         headerName: 'ID',
         width: 90,
         editable: false,
@@ -19,7 +22,7 @@ const columns = [
         sortable: true,
     },
     {
-        field: 'date',
+        field: 'creation',
         headerName: 'Дата создания',
         type: 'date',
         width: 200,
@@ -27,64 +30,29 @@ const columns = [
         sortable: true,
     },
     {
-        field: 'rating',
+        field: 'usersRating',
         headerName: 'Рейтинг',
         type: 'number',
         width: 110,
         editable: false,
         sortable: true,
-    },
-    {
-        field: 'likes',
-        headerName: 'Лайки',
-        type: 'number',
-        width: 110,
-        editable: false,
-        sortable: true,
-    },
-  ];
-  
-  const rows = [
-    {
-        id: 1,
-        title: 'StarWars: kek republic',
-        date: '2021-02-13',
-        description: 'Под пиво пойдет.',
-        image: 'https://source.unsplash.com/random',
-        rating: 5,
-        likes: 10
-      },
-      {
-        id: 2,
-        title: 'StarWars: kek republic1',
-        date: '2021-02-14',
-        description: 'Под пиво не пойдет.',
-        image: 'https://source.unsplash.com/random',
-        rating: 4.85,
-        likes: 10
-      },
-      {
-        id: 3,
-        title: 'StarWars: kek republic2',
-        date: '2021-02-15',
-        description: 'Под пиво не пойдет.',
-        image: 'https://source.unsplash.com/random',
-        rating: 5,
-        likes: 10
-      },
-      {
-        id: 4,
-        title: 'StarWars: kek republic3',
-        date: '2021-02-16',
-        description: 'Под пиво не пойдет.',
-        image: 'https://source.unsplash.com/random',
-        rating: 5,
-        likes: 10
-      }
+    }
   ];
 
 function MyReviews(){
+    const {userID} = useParams();
     let navigate = useNavigate();
+
+    const [reviewFromDb, setReview] = React.useState([]);
+  
+    const getReview = () => {
+      ReviewService.getUsersReviewsList(userID).then((response) => setReview(response.data))
+    }
+
+    React.useEffect(() => {
+        getReview();
+    }, [])
+
     return (
         <div>
             <Typography variant="h6" gutterBottom>
@@ -93,13 +61,14 @@ function MyReviews(){
             <Divider/>
             <div style={{height: 700, width: '100%', marginTop: 10 }}>
                 <DataGrid
-                    rows={rows}
+                    rows={reviewFromDb}
                     columns={columns}
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     onRowDoubleClick={(params) => {
-                        navigate("my_reviews/" + params.row.id + "/edit");
+                        navigate("my_reviews/" + params.row.reviewId + "/edit");
                     }}
+                    getRowId={row => row.reviewId}
                 />
             </div>
         </div>

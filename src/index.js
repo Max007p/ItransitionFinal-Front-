@@ -11,7 +11,7 @@ import MyReviews from './content/MyReviews';
 import AdminPanel from './content/AdminPanel';
 import Review from './pages/Review';
 import ReviewForm from './pages/ReviewForm';
-window.$name = null;
+import Registration from './pages/Registration'
 
 ReactDOM.render((
   <BrowserRouter>
@@ -27,6 +27,7 @@ ReactDOM.render((
         <Route path="my_reviews/:reviewID/edit" element={<ReviewForm/>}/>
         <Route path="create_review" element={<ReviewForm/>}/>
       </Route>
+      <Route path="/signin" element={<Registration/>}/>
       <Route
       path="*"
       element={

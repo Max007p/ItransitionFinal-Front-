@@ -11,6 +11,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Backdrop from '@mui/material/Backdrop';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
+import authService from '../services/auth.service';
 
 function Header(props) {
   const { sections, title } = props;
@@ -29,12 +30,24 @@ function Header(props) {
     p: 4,
   };
   let regTemplate;
+  const user = authService.getCurrentUser();
+  const [button, buttonHandler] = React.useState(false);
+
+  React.useEffect(() => {
+    handleChange();
+  }, []);
+
+  const handleChange = (e) => {
+    buttonHandler(true);
+    if (button == true){
+      window.location = "/signin";
+    }
+  };
   
   
-  
-  if (window.$name == null)
+  if (user != null)
   {
-    regTemplate = <Button variant="outlined" size="small" href="/user/1/">Profile</Button>
+    regTemplate = <Button variant="outlined" size="small" href={"/user/" + user.id}>Profile</Button>
   }
   else
   {
@@ -54,7 +67,7 @@ function Header(props) {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
+            <Typography id="transition-modal-title" variant="h6" component="h2" >
               Войдите с помощью социальной сети
             </Typography>
             <Divider/>
@@ -67,6 +80,20 @@ function Header(props) {
             >
               <Button size="small" variant="outlined" color="primary" aria-label="Sign in through Google" component="span" startIcon={<GoogleIcon/>}>Google</Button>
               <Button size="small" variant="outlined" color="primary" aria-label="Sign in through VK" component="span">Vkontakte</Button>
+            </Stack>
+            <Typography id="transition-modal-title" variant="h6" component="h2" align="center">
+              Войдите с помощью аккаунта
+            </Typography>
+            <Divider/>
+            <Stack
+              direction="column"
+              justifyContent="center"
+              spacing={2}
+              alignItems="stretch"
+              sx={{marginBottom: 2, marginTop: 2}}
+            >
+              <Button size="small" variant="outlined" color="primary" component="span" onClick={handleChange}>Войти</Button>
+              <Button size="small" variant="outlined" color="primary" component="span" onClick={handleChange}>Зарегистрироваться</Button>
             </Stack>
           </Box>
         </Fade>
